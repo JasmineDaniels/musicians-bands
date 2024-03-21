@@ -1,5 +1,6 @@
 const { sequelize } = require('./db');
 const { Band, Musician, Song } = require('./index')
+const { describe } = require('@jest/globals');
 
 describe('Band, Musician, and Song Models', () => {
     /**
@@ -14,31 +15,43 @@ describe('Band, Musician, and Song Models', () => {
 
     test('can create a Band', async () => {
         // TODO - test creating a band
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const newBand = await Band.create({ name: 'TicTacToe', genre: 'pop'});
+        expect(newBand).toBeInstanceOf(Band);
     })
 
     test('can create a Musician', async () => {
         // TODO - test creating a musician
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const newMusician = await Musician.create({ name: 'JoeBlow', instrument: 'symbols'});
+        expect(newMusician).toBeInstanceOf(Musician);
     })
 
     test('can update a Band', async () => {
         // TODO - test updating a band
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const aBand = await Band.create({ name: 'TicTacToe', genre: 'pop'});
+        const newBand = await aBand.update({ name: 'ConnectFour'});
+        expect(newBand.name).toBe('ConnectFour');
     })
 
     test('can update a Musician', async () => {
         // TODO - test updating a musician
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const aMusician = await Musician.create({ name: 'JoeBlow', instrument: 'symbols'});
+        const newMusician = await aMusician.update({ instrument: 'horn'});
+        expect(newMusician.instrument).toBe('horn');
     })
 
     test('can delete a Band', async () => {
         // TODO - test deleting a band
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const aBand = await Band.create({ name: 'Roboto', genre: 'pop'});
+        await aBand.destroy();
+        const isNull = await Band.findByPk(3);
+        expect(isNull).toBeNull();
     })
 
     test('can delete a Musician', async () => {
         // TODO - test deleting a musician
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const aMusician = await Musician.create({ name: 'BasePlayer', instrument: 'base'});
+        await aMusician.destroy({ where: { name: 'BasePlayer'}});
+        const isNull = await Musician.findOne({ where: {name: 'BasePlayer'}});
+        expect(isNull).toBeNull();
     })
 })
